@@ -179,7 +179,7 @@ function closePage()
     echo "</div>
         </div>
 <footer>
-<p>(c) Marc Augier 2013 | <a href='http://www.css3templates.co.uk'>design from css3templates.co.uk</a></p>
+<p>(c) <a href='http://about.me/marc.augier'>Marc Augier</a> 2013 | <a href='https://github.com/marcyves/cool'>Cool on GitHub</a> | <a href='http://www.css3templates.co.uk'>design from css3templates.co.uk</a></p>
 </footer>
 
 </body>
@@ -200,6 +200,7 @@ function title($icon, $title)
             <h1 style="margin: 15px 0 0 0;">'.$title.'</h1>';
 
 }
+
 function accountBrowse($userId)
 {
     global $mysqli;
@@ -388,7 +389,8 @@ function getTeamById($id)
 	if (list($name) = mysqli_fetch_row($result))
 		return $name." ($id)";
 	else
-		return "$id";}
+		return "$id";
+}
 
 
 function getRoleById($id)
@@ -400,7 +402,8 @@ function getRoleById($id)
 	if (list($name) = mysqli_fetch_row($result))
 		return $name;
 	else
-		return "No role defined";}
+		return "No role defined";
+}
 
 function getCampusById($id)
 {
@@ -411,7 +414,8 @@ function getCampusById($id)
 	if (list($name) = mysqli_fetch_row($result))
 		return $name;
 	else
-		return false;}
+		return false;
+}
 
 function isUserReady($id)
 {
@@ -436,7 +440,8 @@ function isUserReady($id)
 			} else
 			{
 				return false;
-			}		} else
+			}
+		} else
 		{
 			return false;
 		}
