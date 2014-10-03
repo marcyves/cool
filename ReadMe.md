@@ -9,7 +9,7 @@ Collaborative Open Online Learning
 - Le nombre de groupes max est hard codé dans la liste des groupes de user settings
 - mailing list
 - calcul des temps entre transaction (proposition, achat, paiement)
-paiement de prime par les animateurs
+- paiement de prime par les animateurs
 - permettre de chercher sur un nom d’utilisateur
 - procédure d’installation/création des groupes en ligne
 - identification du cours
@@ -17,7 +17,7 @@ paiement de prime par les animateurs
 - pouvoir faire tourner plusieurs cours (plusieurs BDD à la Dokeos ou contenu dans la BDD ?)
 - Inclure un wiki pour le support du cours.
 - inclure un calendrier
-affichage de news par les animateurs
+- affichage de news par les animateurs
 - traduction
 - aide en ligne
 - messagerie interne
