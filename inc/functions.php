@@ -90,12 +90,21 @@ if(isUserLoggedIn()) {
         </header>
         ";
 
+        
+if ($loggedInUser->checkPermission(array(1)))
+	$userLevel = "Student";
+if ($loggedInUser->checkPermission(array(2)))
+	$userLevel = "Professor";
+if ($loggedInUser->checkPermission(array(3)))
+	$userLevel = "Admin";
+	
+
         echo '<div id="site_content">';
-        $text = "<h3>".$loggedInUser->displayname."</h3>".
+        $text = "<h3>".$loggedInUser->displayname."</h3><i>$userLevel</i>".
          "<h5>".$loggedInUser->title." (".getRoleById($loggedInUser->role).")</h5>
              <h4>Liens utiles</h4>
              <ul>
-             <li><a target='_blank' href='http://movilab.org/index.php?title=SKEMA_BS_:_Cours_de_Performance_Durable_-_M1_-_Ann%C3%A9e_2014-2015'>Movilab</a></li>
+             <li><a target='_blank' href='http://www.google.com'>Google</a></li>
              </ul>";
 
         echo displaySideMenu($text);
