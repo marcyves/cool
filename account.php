@@ -27,7 +27,8 @@ require_once("inc/functions.php");
 
 Page for permission level 1 (user)
 
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  = */if ($loggedInUser->checkPermission(array(1))) {
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  = */
+if ($loggedInUser->checkPermission(array(1))) {
     openPage("Your Account");
 
 	if (isUserReady($loggedInUser->user_id))
@@ -111,7 +112,8 @@ Page for permission level 1 (user)
 
 Page for permission level 2 (professor)
 
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  = */if ($loggedInUser->checkPermission(array(2)))
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  = */
+if ($loggedInUser->checkPermission(array(2)))
     {
         openPage("Les scores globaux");
 
@@ -136,17 +138,18 @@ Page for permission level 2 (professor)
                 $sortOrder = "";
         }
         
-        if ($result = mysqli_query($mysqli, "SELECT display_name, coalesce(sum(debit), 0) as totalDebit ,count(debit), coalesce(sum(credit),0) as totalCredit, count(credit),  coalesce(sum(credit), 0)- coalesce(sum(debit), 0) FROM account A, sk_users U WHERE A.account1 = U.id GROUP BY account1 $sortOrder"))
+        if ($result = mysqli_query($mysqli, "SELECT display_name, teamId, coalesce(sum(debit), 0) as totalDebit ,count(debit), coalesce(sum(credit),0) as totalCredit, count(credit),  coalesce(sum(credit), 0)- coalesce(sum(debit), 0) FROM account A, sk_users U WHERE A.account1 = U.id GROUP BY account1 $sortOrder ORDER BY teamId"))
             {
     		echo "<table style='width:100%; border-spacing:0;'>".
-				  "<tr><th>".sortLink("team","Team")."</th>
+				  "<tr><th>".sortLink("name","Name")."</th>
+				                       <th>".sortLink("team","Team")."</th>
                                        <th>".sortLink("debit","Débit")." (".sortLink("cdebit","nb").")</th>
                                        <th>".sortLink("credit","Crédit")." (".sortLink("ccredit","nb").")</th>
                                        <th width='50%'>".sortLink("solde","Solde")."</th></tr>";
 		/* fetch associative array */
-                while (list($teamName, $debit, $debitTrans, $credit, $creditTrans, $solde)  = mysqli_fetch_row($result))
+                while (list($userName, $teamName, $debit, $debitTrans, $credit, $creditTrans, $solde)  = mysqli_fetch_row($result))
                 {
-                    echo "<tr><td>$teamName</td><td style='text-align: right;'>".number_format($debit)." ($debitTrans) </td><td  style='text-align: right;'>".number_format($credit)." ($creditTrans)</td><td>".number_format($solde)."</td></tr>";
+                    echo "<tr><td>$userName</td><td>$teamName</td><td style='text-align: right;'>".number_format($debit)." ($debitTrans) </td><td  style='text-align: right;'>".number_format($credit)." ($creditTrans)</td><td>".number_format($solde)."</td></tr>";
 	        }
                 echo "</table>
 		<br/>
