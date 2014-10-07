@@ -36,7 +36,7 @@ if(!empty($_POST))
 		$errors[] = lang("SQL_ERROR");
 }
 
-$userData = fetchAllUsers(); //Fetch information for all users
+$userData = fetchAllUsersByTeam(); //Fetch information for all users
 
 //echo resultBlock($errors,$successes);
 
@@ -44,18 +44,26 @@ echo "
 <form name='adminUsers' action='".$_SERVER['PHP_SELF']."' method='post'>
 <table class='admin'>
 <tr>
-<th>Username</th><th>Display Name</th><th>e-mail</th><th>Last Sign In</th>
+<th>Username</th><th>Display Name</th><th>Role</th><th>Campus</th><th>Last Sign In</th>
 </tr>";
 
 //Cycle through users
+$previousTeam = '';
 foreach ($userData as $v1) {
-    
-    if ($v1['title']=='Student'){
+    if ($v1['team'] != $previousTeam)
+    {
+    	$previousTeam = $v1['team'];
+    	echo "
+	<tr>
+	<td colspan='5'>Team : ".$v1['team']."</td></tr>";
+    }
+//    if ($v1['title']=='Student'){
 	echo "
 	<tr>
 	<td><a href='admin_user.php?id=".$v1['id']."'>".$v1['user_name']."</a></td>
 	<td>".$v1['display_name']."</td>
-	<td>".$v1['email']."</td>
+	<td>".$v1['role']."</td>
+	<td>".$v1['campus']."</td>
 	<td>
 	";
 	
@@ -69,7 +77,7 @@ foreach ($userData as $v1) {
 	echo "
 	</td>
 	</tr>";
-    }
+//    }
 }
 
 echo "</table>
