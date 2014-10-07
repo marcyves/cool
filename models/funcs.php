@@ -304,6 +304,44 @@ function fetchAllUsers()
 	return ($row);
 }
 
+//Retrieve information for all users ordered by teamId
+function fetchAllUsersByTeam()
+{
+	global $mysqli,$db_table_prefix; 
+	$stmt = $mysqli->prepare("SELECT 
+		U.id,
+		user_name,
+		display_name,
+		password,
+		email,
+		activation_token,
+		last_activation_request,
+		lost_password_request,
+		active,
+		title,
+		role,
+		campusName,
+		teamId,
+		sign_up_stamp,
+		last_sign_in_stamp
+		FROM ".$db_table_prefix."users U,
+		     role R,
+		     campus C
+		WHERE
+			R.id = U.roleId 
+		 AND
+		 	C.id = U.campusId	
+		ORDER BY teamId");
+	$stmt->execute();
+	$stmt->bind_result($id, $user, $display, $password, $email, $token, $activationRequest, $passwordRequest, $active, $title, $role, $campus, $team, $signUp, $signIn);
+	
+	while ($stmt->fetch()){
+		$row[] = array('id' => $id, 'user_name' => $user, 'display_name' => $display, 'password' => $password, 'email' => $email, 'activation_token' => $token, 'last_activation_request' => $activationRequest, 'lost_password_request' => $passwordRequest, 'active' => $active, 'title' => $title, 'role' => $role, 'campus' => $campus, 'team' => $team,'sign_up_stamp' => $signUp, 'last_sign_in_stamp' => $signIn);
+	}
+	$stmt->close();
+	return ($row);
+}
+
 //Retrieve complete user information by username, token or ID
 function fetchUserDetails($username=NULL,$token=NULL, $id=NULL)
 {
