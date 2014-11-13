@@ -147,8 +147,25 @@ if ($loggedInUser->checkPermission(array(2)))
                                        <th>".sortLink("credit","Crédit")." (".sortLink("ccredit","nb").")</th>
                                        <th width='50%'>".sortLink("solde","Solde")."</th></tr>";
 		/* fetch associative array */
-                while (list($userName, $teamName, $debit, $debitTrans, $credit, $creditTrans, $solde)  = mysqli_fetch_row($result))
+		        $flagTeam = 0;                while (list($userName, $teamName, $roleId, $roleName, $debit, $debitTrans, $credit, $creditTrans, $solde)  = mysqli_fetch_row($result))
                 {
+                	if ($flagTeam == 0)
+                		$flagTeam = $teamName;
+                		
+                	if ($flagTeam != $teamName)
+                	{
+                		/* This entry is for a new team */
+                		// First display the total for the previous team
+                		$resultTeam = mysqli_query($mysqli, "SELECT coalesce(sum(debit), 0) as totalDebit ,count(debit), coalesce(sum(credit),0) as totalCredit, count(credit),  coalesce(sum(credit), 0)- coalesce(sum(debit), 0) FROM account A, sk_users U, role R WHERE A.account1 = U.id and R.id = U.roleId and teamId = '$flagTeam' GROUP BY teamId");
+                		
+                		list ($debit1, $debitTrans1, $credit1, $creditTrans1, $solde1)  = mysqli_fetch_row($resultTeam);
+        	            echo "<tr style='color:blue;'><td>Equipe $flagTeam</td><td>&nbsp;</td><td>Total: </td><td style='text-align: right;'>".number_format($debit1)." ($debitTrans1) </td><td  style='text-align: right;'>".number_format($credit1)." ($creditTrans1)</td><td>".number_format($solde1)."</td></tr>";
+        	                            		
+    	            	$flagTeam = $teamName;
+
+            	    } 
+                	            	    
+               		/* Now display the entry for the current team */
                     echo "<tr><td>$userName</td><td>$teamName</td><td style='text-align: right;'>".number_format($debit)." ($debitTrans) </td><td  style='text-align: right;'>".number_format($credit)." ($creditTrans)</td><td>".number_format($solde)."</td></tr>";
 	        }
                 echo "</table>
