@@ -78,6 +78,7 @@ if(isUserLoggedIn()) {
    		}
    		echo "           </li>";
   		if ($loggedInUser->checkPermission(array(2))){ //Links for permission level 2 (professor)
+      		echo "               <li><a href='accountError.php'>Anomalies</a></li>";
       		echo "               <li><a href='pay.php'>Paiement</a></li>";
   	   		echo "               <li><a href='userlist.php'>Groupes</a></li>";
   		}
