@@ -4,6 +4,9 @@ Collaborative Open Online Learning
 
 ##To Do
 
+- Interdire les transactions négatives
+- Interdire les comptes à découvert (ou mettre un découvert maxi)
+- Faire un écran paramètrage pour l'administrateur pour fixer: le montant de l'initialisation des comptes banquier, le montant du découvert maxi (etc.)
 - Autoriser le jardinier wiki à nommer son groupe
 - Pour initialiser le compte du banquier, le code du role banquier est hard codé, à remplacer par une recherche dans la table de code des roles.
 - Le nombre de groupes max est hard codé dans la liste des groupes de user settings
@@ -24,6 +27,8 @@ Collaborative Open Online Learning
 
 
 ##Done
+- Nouvelle fonction professeur pour identification des transactions en erreur (0 ou négative).
+- Liste détaillée des transactions par utilisateur.
 - procédure de création des comptes étudiants au lancement d'un cours (LDAP ?)
 - identification des campus
 - verrouiller les modification du profil après que l’utilisateur a mis à jour son compte
