@@ -27,8 +27,7 @@ require_once("inc/functions.php");
 
 Page for permission level 1 (user)
 
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  = */
-if ($loggedInUser->checkPermission(array(1))) {
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  = */if ($loggedInUser->checkPermission(array(1))) {
     openPage("Your Account");
 
 	if (isUserReady($loggedInUser->user_id))
@@ -110,10 +109,9 @@ if ($loggedInUser->checkPermission(array(1))) {
     
 /* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  
 
-Page for permission level 2 (professor)
+         Page for permission level 2 (professor)
 
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  = */
-if ($loggedInUser->checkPermission(array(2)))
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */if ($loggedInUser->checkPermission(array(2)))
     {
         openPage("Les scores globaux");
 
@@ -138,16 +136,17 @@ if ($loggedInUser->checkPermission(array(2)))
                 $sortOrder = "";
         }
         
-        if ($result = mysqli_query($mysqli, "SELECT display_name, teamId, coalesce(sum(debit), 0) as totalDebit ,count(debit), coalesce(sum(credit),0) as totalCredit, count(credit),  coalesce(sum(credit), 0)- coalesce(sum(debit), 0) FROM account A, sk_users U WHERE A.account1 = U.id GROUP BY account1 $sortOrder ORDER BY teamId"))
+        if ($result = mysqli_query($mysqli, "SELECT U.id, display_name, teamId, roleId, R.role, coalesce(sum(debit), 0) as totalDebit ,count(debit), coalesce(sum(credit),0) as totalCredit, count(credit),  coalesce(sum(credit), 0)- coalesce(sum(debit), 0) FROM account A, sk_users U, role R WHERE A.errorFlag <> '1' AND A.account1 = U.id and R.id = U.roleId GROUP BY account1  ORDER BY teamId"))
             {
     		echo "<table style='width:100%; border-spacing:0;'>".
 				  "<tr><th>".sortLink("name","Name")."</th>
+				                       <th>".sortLink("role","Role")."</th>
 				                       <th>".sortLink("team","Team")."</th>
                                        <th>".sortLink("debit","Débit")." (".sortLink("cdebit","nb").")</th>
                                        <th>".sortLink("credit","Crédit")." (".sortLink("ccredit","nb").")</th>
                                        <th width='50%'>".sortLink("solde","Solde")."</th></tr>";
 		/* fetch associative array */
-		        $flagTeam = 0;                while (list($userName, $teamName, $roleId, $roleName, $debit, $debitTrans, $credit, $creditTrans, $solde)  = mysqli_fetch_row($result))
+		        $flagTeam = 0;                while (list($userId, $userName, $teamName, $roleId, $roleName, $debit, $debitTrans, $credit, $creditTrans, $solde)  = mysqli_fetch_row($result))
                 {
                 	if ($flagTeam == 0)
                 		$flagTeam = $teamName;
@@ -156,17 +155,18 @@ if ($loggedInUser->checkPermission(array(2)))
                 	{
                 		/* This entry is for a new team */
                 		// First display the total for the previous team
-                		$resultTeam = mysqli_query($mysqli, "SELECT coalesce(sum(debit), 0) as totalDebit ,count(debit), coalesce(sum(credit),0) as totalCredit, count(credit),  coalesce(sum(credit), 0)- coalesce(sum(debit), 0) FROM account A, sk_users U, role R WHERE A.account1 = U.id and R.id = U.roleId and teamId = '$flagTeam' GROUP BY teamId");
+                		$resultTeam = mysqli_query($mysqli, "SELECT coalesce(sum(debit),0) as totalDebit, count(debit), coalesce(sum(credit),0) as totalCredit, count(credit),  coalesce(sum(credit),0)- coalesce(sum(debit),0) FROM account A, sk_users U, role R WHERE A.account1 = U.id and R.id = U.roleId and teamId = '$flagTeam' GROUP BY teamId");
                 		
+                		// Display the entry for the team
                 		list ($debit1, $debitTrans1, $credit1, $creditTrans1, $solde1)  = mysqli_fetch_row($resultTeam);
-        	            echo "<tr style='color:blue;'><td>Equipe $flagTeam</td><td>&nbsp;</td><td>Total: </td><td style='text-align: right;'>".number_format($debit1)." ($debitTrans1) </td><td  style='text-align: right;'>".number_format($credit1)." ($creditTrans1)</td><td>".number_format($solde1)."</td></tr>";
+        	            echo "<tr><td><b>Equipe $flagTeam</b></td><td>&nbsp;</td><td>Total: </td><td style='text-align: right;'>".number_format($debit1)." ($debitTrans1) </td><td  style='text-align: right;'>".number_format($credit1)." ($creditTrans1)</td><td>".number_format($solde1)."</td></tr>";
         	                            		
     	            	$flagTeam = $teamName;
 
             	    } 
                 	            	    
-               		/* Now display the entry for the current team */
-                    echo "<tr><td>$userName</td><td>$teamName</td><td style='text-align: right;'>".number_format($debit)." ($debitTrans) </td><td  style='text-align: right;'>".number_format($credit)." ($creditTrans)</td><td>".number_format($solde)."</td></tr>";
+               		// Now display the entry for the user
+            	    echo "<tr><td><a href='accountDetail.php?id=$userId'>$userName</a></td><td>$roleName</td><td>$teamName</td><td style='text-align: right;'>".number_format($debit)." ($debitTrans) </td><td  style='text-align: right;'>".number_format($credit)." ($creditTrans)</td><td>".number_format($solde)."</td></tr>";
 	        }
                 echo "</table>
 		<br/>
@@ -179,7 +179,7 @@ if ($loggedInUser->checkPermission(array(2)))
 
 Page for permission level 3 (administrator)
 
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  = */    
+ = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = */    
 if ($loggedInUser->checkPermission(array(3)))
     {
         openPage("Les scores globaux des équipes");
