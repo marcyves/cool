@@ -155,7 +155,7 @@ Page for permission level 1 (user)
                 	{
                 		/* This entry is for a new team */
                 		// First display the total for the previous team
-                		$resultTeam = mysqli_query($mysqli, "SELECT coalesce(sum(debit),0) as totalDebit, count(debit), coalesce(sum(credit),0) as totalCredit, count(credit),  coalesce(sum(credit),0)- coalesce(sum(debit),0) FROM account A, sk_users U, role R WHERE A.account1 = U.id and R.id = U.roleId and teamId = '$flagTeam' GROUP BY teamId");
+                		$resultTeam = mysqli_query($mysqli, "SELECT coalesce(sum(debit),0) as totalDebit, count(debit), coalesce(sum(credit),0) as totalCredit, count(credit),  coalesce(sum(credit),0)- coalesce(sum(debit),0) FROM account A, sk_users U, role R WHERE A.errorFlag <> '1' AND  A.account1 = U.id and R.id = U.roleId and teamId = '$flagTeam' GROUP BY teamId");
                 		
                 		// Display the entry for the team
                 		list ($debit1, $debitTrans1, $credit1, $creditTrans1, $solde1)  = mysqli_fetch_row($resultTeam);
