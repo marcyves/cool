@@ -1,12 +1,17 @@
 #COOL
-Collaborative Open Online Learning
+`Collaborative Open Online Learning`
 
 
 ##To Do
 
+- TRANSLATE THIS TODO
+- ACCOUNT: Display short lists
+- ACCOUNT: Allow to select the number of items listed in account
+- ACCOUNT: Export list to Excel/CSV
+- ACCOUNT: Include error transactions 
 - Interdire les transactions négatives
 - Interdire les comptes à découvert (ou mettre un découvert maxi)
-- Faire un écran paramètrage pour l'administrateur pour fixer: le montant de l'initialisation des comptes banquier, le montant du découvert maxi (etc.)
+- ADMIN: Faire un écran paramètrage pour l'administrateur pour fixer: le montant de l'initialisation des comptes banquier, le montant du découvert maxi (etc.)
 - Autoriser le jardinier wiki à nommer son groupe
 - Pour initialiser le compte du banquier, le code du role banquier est hard codé, à remplacer par une recherche dans la table de code des roles.
 - Le nombre de groupes max est hard codé dans la liste des groupes de user settings
@@ -21,7 +26,7 @@ Collaborative Open Online Learning
 - Inclure un wiki pour le support du cours.
 - inclure un calendrier
 - affichage de news par les animateurs
-- traduction
+- Allow Multilingual
 - aide en ligne
 - messagerie interne
 
