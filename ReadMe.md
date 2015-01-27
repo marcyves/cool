@@ -5,8 +5,11 @@ Thesis Selection system
 ##To Do
 
 - Adapt Cool to Tss
-    - Remove Account
+    - Account
     - Change labels
+    
+    - Change references to 'team' in 'program'
+
 
 - Review what to keep from the following todo:
 
