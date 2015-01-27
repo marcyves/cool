@@ -45,7 +45,7 @@ function openPage($title)
         <div id='logo_text'>
           <!-- class='logo_six', allows you to change the colour of the text -->
           <h1><span class='logo_six'><a href='index.php'>$websiteName</a></span></a></h1>
-          <h2>Services and Knowledge Exchange Money</h2>
+          <h2>Student Advisor Matching</h2>
         </div>
       </div>
 ";
@@ -163,15 +163,10 @@ if ($loggedInUser->checkPermission(array(3)))
         <img class="paperclip" src="images/paperclip.png" alt="paperclip" />
         <div class="sidebar">'.
          "<h3>".$loggedInUser->displayname."</h3>".
-         "<h3>".$loggedInUser->title."</h3>
-             <h2>Liens utiles</h2>
-             <ul>
-             <li><a href='http://movilab.org/index.php?title=SKEMA_BS_:_Cours_de_Performance_Durable_-_M1_-_Ann%C3%A9e_2013-2014'>Movilab</a></li>
-             </ul>".
+         "<h3>".$loggedInUser->title."</h3>".
          "<h2>Important</h2>
           <ul>
-          <li>Au début du cours, chaque équipe dispose d'un compte crédité d'un montant de 10.000 SKEMs sur ce site.</li>
-          <li>Ce compte se gère de manière totalement collective (un compte pour une équipe).</li>
+          <li>Login with your usual credentials.</li>
           </ul>".
          "</div>
             ";
@@ -189,7 +184,7 @@ function closePage()
     echo "</div>
         </div>
 <footer>
-<p>(c) <a href='http://about.me/marc.augier'>Marc Augier</a> 2013 | <a href='https://github.com/marcyves/cool'>Cool on GitHub</a> | <a href='http://www.css3templates.co.uk'>design from css3templates.co.uk</a></p>
+<p>(c) <a href='http://about.me/marc.augier'>Marc Augier</a> 2013 | TSS is a branch of <a href='https://github.com/marcyves/cool'>Cool on GitHub</a> | <a href='http://www.css3templates.co.uk'>design from css3templates.co.uk</a></p>
 </footer>
 
 </body>
