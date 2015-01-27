@@ -1,23 +1,18 @@
-#COOL
-`Collaborative Open Online Learning`
+#TSS
 
+Thesis Selection system
 
 ##To Do
 
-- TRANSLATE THIS TODO
-- ACCOUNT: Display short lists
-- ACCOUNT: Allow to select the number of items listed in account
-- ACCOUNT: Export list to Excel/CSV
-- ACCOUNT: Include error transactions 
-- Interdire les transactions négatives
-- Interdire les comptes à découvert (ou mettre un découvert maxi)
+- Adapt Cool to Tss
+    - Remove Account
+    - Change labels
+
+- Review what to keep from the following todo:
+
 - ADMIN: Faire un écran paramètrage pour l'administrateur pour fixer: le montant de l'initialisation des comptes banquier, le montant du découvert maxi (etc.)
-- Autoriser le jardinier wiki à nommer son groupe
-- Pour initialiser le compte du banquier, le code du role banquier est hard codé, à remplacer par une recherche dans la table de code des roles.
 - Le nombre de groupes max est hard codé dans la liste des groupes de user settings
 - mailing list
-- calcul des temps entre transaction (proposition, achat, paiement)
-- paiement de prime par les animateurs
 - permettre de chercher sur un nom d’utilisateur
 - procédure d’installation/création des groupes en ligne
 - identification du cours
@@ -32,9 +27,3 @@
 
 
 ##Done
-- Nouvelle fonction professeur pour identification des transactions en erreur (0 ou négative).
-- Liste détaillée des transactions par utilisateur.
-- procédure de création des comptes étudiants au lancement d'un cours (LDAP ?)
-- identification des campus
-- verrouiller les modification du profil après que l’utilisateur a mis à jour son compte
-- pointer les nouveaux connectés sur la page user settings ensuite sur home normal
