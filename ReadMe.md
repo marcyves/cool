@@ -38,4 +38,3 @@
 - identification des campus
 - verrouiller les modification du profil après que l’utilisateur a mis à jour son compte
 - pointer les nouveaux connectés sur la page user settings ensuite sur home normal
-
