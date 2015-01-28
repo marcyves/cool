@@ -8,8 +8,9 @@ Thesis Selection system
     - Account
     - Change labels
     
-    - Change references to 'team' in 'program'
-
+    
+Admin functions
+   - Manage the list of programs
 
 - Review what to keep from the following todo:
 
@@ -30,3 +31,18 @@ Thesis Selection system
 
 
 ##Done
+
+- Change references to 'team' into 'program'
+    - user_settings.php
+    - index.php
+    - account.php
+    - functions.php
+    - funcs.php
+    - en.php
+    - class.user.php
+    - ALTER table users to rename teamId column into programId
+
+- remove references to 'role'
+    - drop table role
+    - alter table users to remove roleId column
+    - funcs.php

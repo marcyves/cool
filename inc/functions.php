@@ -60,28 +60,18 @@ if(isUserLoggedIn()) {
                     <li><a href='account.php'>Account Home</a></li>";
 	if (isUserReady($loggedInUser->user_id))
 	{
-		echo "          <li><a href='market.php'>Marketplace</a>";
-   		if ($loggedInUser->checkPermission(array(1))){ //Links for permission level 1 (student)
-   		echo "           <ul>
-                        <li><a href='market.php'>Vos questions (seeker)</a></li>
-                        <li><a href='market.php?cmd=bbuy'>Répondre aux questions (solver)</a></li>
-                    </ul>";
-   		}
-   		echo "           </li>
-                    <li><a href='wok.php'>WOC</a>";
-   		if ($loggedInUser->checkPermission(array(1))){ //Links for permission level 1 (student)
-  		echo " 
-                    <ul>
-                        <li><a href='wok.php'>Vos compétences</a></li>
-                        <li><a href='wok.php?cmd=bsell'>Acheter une compétence</a></li>
-                    </ul>";
-   		}
-   		echo "           </li>";
-  		if ($loggedInUser->checkPermission(array(2))){ //Links for permission level 2 (professor)
-      		echo "               <li><a href='accountError.php'>Anomalies</a></li>";
-      		echo "               <li><a href='pay.php'>Paiement</a></li>";
-  	   		echo "               <li><a href='userlist.php'>Groupes</a></li>";
-  		}
+            echo "          <li><a href='market.php'>Marketplace</a>";
+            if ($loggedInUser->checkPermission(array(2))){ //Links for permission level 1 (student)
+            echo "           <ul>
+                    <li><a href='market.php'>Vos questions (seeker)</a></li>
+                    <li><a href='market.php?cmd=bbuy'>Répondre aux questions (solver)</a></li>
+                </ul>";
+            }
+            echo "           </li>";
+            
+            if ($loggedInUser->checkPermission(array(2))){ //Links for permission level 2 (professor)
+                echo "<li><a href='wok.php'>Thesis Proposition</a></li>";}
+                echo "<li><a href='userlist.php'>Groupes</a></li>";
 	}	
    	echo "           <li><a href='user_settings.php'>User Settings</a></li>
                     <li><a href='logout.php'>Logout</a></li>
@@ -102,11 +92,7 @@ if ($loggedInUser->checkPermission(array(3)))
 
         echo '<div id="site_content">';
         $text = "<h3>".$loggedInUser->displayname."</h3><i>$userLevel</i>".
-         "<h5>".$loggedInUser->title." (".getRoleById($loggedInUser->role).")</h5>
-             <h4>Liens utiles</h4>
-             <ul>
-             <li><a target='_blank' href='http://www.google.com'>Google</a></li>
-             </ul>";
+         "<h2>Your program: ".getProgramById($loggedInUser->program)."</h2>";
 
         echo displaySideMenu($text);
 
@@ -162,8 +148,6 @@ if ($loggedInUser->checkPermission(array(3)))
       <div id="sidebar_container">
         <img class="paperclip" src="images/paperclip.png" alt="paperclip" />
         <div class="sidebar">'.
-         "<h3>".$loggedInUser->displayname."</h3>".
-         "<h3>".$loggedInUser->title."</h3>".
          "<h2>Important</h2>
           <ul>
           <li>Login with your usual credentials.</li>
@@ -385,14 +369,14 @@ function countMyMarketReply($marketId){
 /* = = = = = = = = = = = = = = = = = = = = = = *
     Decoding functions
  * = = = = = = = = = = = = = = = = = = = = = = */
-function getTeamById($id)
+function getProgramById($id)
 {
     global $mysqli;
 
-	$result = mysqli_query($mysqli,"SELECT teamName FROM team WHERE id='$id'");
+	$result = mysqli_query($mysqli,"SELECT programName FROM program WHERE id='$id'");
 	
 	if (list($name) = mysqli_fetch_row($result))
-		return $name." ($id)";
+		return $name;
 	else
 		return "$id";
 }
@@ -426,34 +410,27 @@ function isUserReady($id)
 {
     global $mysqli;
 
-	$result = mysqli_query($mysqli,"SELECT roleId FROM sk_users WHERE id='$id'");
-	list($name) = mysqli_fetch_row($result);
+	
+    $result = mysqli_query($mysqli,"SELECT programId FROM sk_users WHERE id='$id'");
+    list($name) = mysqli_fetch_row($result);
 
-	if ($name > 0)
-	{
-		$result = mysqli_query($mysqli,"SELECT teamId FROM sk_users WHERE id='$id'");
-		list($name) = mysqli_fetch_row($result);
-		
-		if ($name > 0)
-		{
-			$result = mysqli_query($mysqli,"SELECT campusId FROM sk_users WHERE id='$id'");
-			list($name) = mysqli_fetch_row($result);
-			
-			if ($name > 0)
-			{
-				return true;
-			} else
-			{
-				return false;
-			}
-		} else
-		{
-			return false;
-		}
-	} else
-	{
-		return false;
-	}
+    if ($name > 0)
+    {
+            $result = mysqli_query($mysqli,"SELECT campusId FROM sk_users WHERE id='$id'");
+            list($name) = mysqli_fetch_row($result);
+
+            if ($name > 0)
+            {
+                    return true;
+            } else
+            {
+                    return false;
+            }
+    } else
+    {
+            return false;
+    }
+	
 }
 
 function getUserFromMarket($id)
@@ -466,20 +443,20 @@ function getUserFromMarket($id)
     return $user_id;
 }
 
-function browseMyTeam($id)
+function browseMyProgram($id)
 {
 	global $mysqli;
 	    
     echo "<img style='float: left; vertical-align: middle; margin: 0 10px 0 0;' src='images/examples.png' alt='Information' />
-           <h1 style='margin: 15px 0 0 0;'>Your team is #$id</h1><p>
+           <h1 style='margin: 15px 0 0 0;'>Your program is ".getProgramById($id)."</h1><p>
            <table>
-           <tr><th>Nom</th><th>Role</th></tr>";
+           <tr><th>Nom</th></tr>";
 
-    $result = mysqli_query($mysqli, "SELECT `display_name`, R.role FROM `sk_users` U, role R WHERE teamId = '$id' and U.roleId = R.id ORDER BY display_name");
+    $result = mysqli_query($mysqli, "SELECT `display_name` FROM `sk_users` U WHERE programId = '$id' ORDER BY display_name");
     
-    while (list($user, $role) = mysqli_fetch_row($result))
+    while (list($user) = mysqli_fetch_row($result))
 	{
-        echo "<tr><td>$user</td><td>$role</td></tr>";
+        echo "<tr><td>$user</td></tr>";
     }
         
     echo "

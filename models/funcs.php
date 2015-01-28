@@ -304,8 +304,8 @@ function fetchAllUsers()
 	return ($row);
 }
 
-//Retrieve information for all users ordered by teamId
-function fetchAllUsersByTeam()
+//Retrieve information for all users ordered by programId
+function fetchAllUsersByProgram()
 {
 	global $mysqli,$db_table_prefix; 
 	$stmt = $mysqli->prepare("SELECT 
@@ -319,24 +319,20 @@ function fetchAllUsersByTeam()
 		lost_password_request,
 		active,
 		title,
-		role,
 		campusName,
-		teamId,
+		programId,
 		sign_up_stamp,
 		last_sign_in_stamp
 		FROM ".$db_table_prefix."users U,
-		     role R,
 		     campus C
 		WHERE
-			R.id = U.roleId 
-		 AND
-		 	C.id = U.campusId	
-		ORDER BY teamId");
+			C.id = U.campusId	
+		ORDER BY programId");
 	$stmt->execute();
-	$stmt->bind_result($id, $user, $display, $password, $email, $token, $activationRequest, $passwordRequest, $active, $title, $role, $campus, $team, $signUp, $signIn);
+	$stmt->bind_result($id, $user, $display, $password, $email, $token, $activationRequest, $passwordRequest, $active, $title, $campus, $program, $signUp, $signIn);
 	
 	while ($stmt->fetch()){
-		$row[] = array('id' => $id, 'user_name' => $user, 'display_name' => $display, 'password' => $password, 'email' => $email, 'activation_token' => $token, 'last_activation_request' => $activationRequest, 'lost_password_request' => $passwordRequest, 'active' => $active, 'title' => $title, 'role' => $role, 'campus' => $campus, 'team' => $team,'sign_up_stamp' => $signUp, 'last_sign_in_stamp' => $signIn);
+		$row[] = array('id' => $id, 'user_name' => $user, 'display_name' => $display, 'password' => $password, 'email' => $email, 'activation_token' => $token, 'last_activation_request' => $activationRequest, 'lost_password_request' => $passwordRequest, 'active' => $active, 'title' => $title, 'campus' => $campus, 'program' => $program,'sign_up_stamp' => $signUp, 'last_sign_in_stamp' => $signIn);
 	}
 	$stmt->close();
 	return ($row);
@@ -369,9 +365,8 @@ function fetchUserDetails($username=NULL,$token=NULL, $id=NULL)
 		lost_password_request,
 		active,
 		title,
-		roleId,
 		campusId,
-		teamId,		
+		programId,		
 		sign_up_stamp,
 		last_sign_in_stamp
 		FROM ".$db_table_prefix."users
@@ -381,9 +376,9 @@ function fetchUserDetails($username=NULL,$token=NULL, $id=NULL)
 		$stmt->bind_param("s", $data);
 	
 	$stmt->execute();
-	$stmt->bind_result($id, $user, $display, $password, $email, $token, $activationRequest, $passwordRequest, $active, $title, $role, $campus, $team, $signUp, $signIn);
+	$stmt->bind_result($id, $user, $display, $password, $email, $token, $activationRequest, $passwordRequest, $active, $title, $campus, $program, $signUp, $signIn);
 	while ($stmt->fetch()){
-		$row = array('id' => $id, 'user_name' => $user, 'display_name' => $display, 'password' => $password, 'email' => $email, 'activation_token' => $token, 'last_activation_request' => $activationRequest, 'lost_password_request' => $passwordRequest, 'active' => $active, 'title' => $title, 'role' => $role, 'campus' => $campus, 'team' => $team, 'sign_up_stamp' => $signUp, 'last_sign_in_stamp' => $signIn);
+		$row = array('id' => $id, 'user_name' => $user, 'display_name' => $display, 'password' => $password, 'email' => $email, 'activation_token' => $token, 'last_activation_request' => $activationRequest, 'lost_password_request' => $passwordRequest, 'active' => $active, 'title' => $title, 'campus' => $campus, 'program' => $program, 'sign_up_stamp' => $signUp, 'last_sign_in_stamp' => $signIn);
 	}
 	$stmt->close();
 	return ($row);

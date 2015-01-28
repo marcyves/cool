@@ -79,6 +79,7 @@ if(!empty($_POST))
                             $loggedInUser = new loggedInUser();
                             $loggedInUser->email = $userdetails["email"];
                             $loggedInUser->user_id = $userdetails["id"];
+                            $loggedInUser->program = $userdetails["program"];
                             $loggedInUser->hash_pw = $userdetails["password"];
                             $loggedInUser->title = $userdetails["title"];
                             $loggedInUser->displayname = $userdetails["display_name"];
@@ -172,13 +173,11 @@ if(!empty($_POST))
                 $loggedInUser->username = $userdetails["user_name"];
 
                 $loggedInUser->campus = $userdetails["campus"];
-                $loggedInUser->team = $userdetails["team"];
-                $loggedInUser->role = $userdetails["role"];
+                $loggedInUser->program = $userdetails["program"];
 
                 //Update last sign in
                 $loggedInUser->updateLastSignIn();
                 $_SESSION["userCakeUser"] = $loggedInUser;
-
                 //Redirect to user account page
                 header("Location: account.php");
                 die();

@@ -10,7 +10,7 @@ class loggedInUser {
 	public $user_id = NULL;
 	public $role = NULL;
 	public $campus = NULL;
-	public $team = NULL;
+	public $program = NULL;
 	
 	//Simple function to update the last sign in of a user
 	public function updateLastSignIn()
@@ -73,30 +73,15 @@ class loggedInUser {
 		$stmt->execute();
 		$stmt->close();	
 	}
-	
-	//Update a users role
-	public function updateRole($id)
-	{
-		global $mysqli,$db_table_prefix;
-		$this->role = $id;
-		$stmt = $mysqli->prepare("UPDATE ".$db_table_prefix."users
-			SET 
-			roleId = ?
-			WHERE
-			id = ?");
-		$stmt->bind_param("si", $id, $this->user_id);
-		$stmt->execute();
-		$stmt->close();	
-	}
 		
-	//Update a users team
-	public function updateTeam($id)
+	//Update a users program
+	public function updateProgram($id)
 	{
 		global $mysqli,$db_table_prefix;
-		$this->team = $id;
+		$this->program = $id;
 		$stmt = $mysqli->prepare("UPDATE ".$db_table_prefix."users
 			SET 
-			teamId = ?
+			programId = ?
 			WHERE
 			id = ?");
 		$stmt->bind_param("si", $id, $this->user_id);

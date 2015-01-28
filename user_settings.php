@@ -108,52 +108,16 @@ if(!empty($_POST))
 		}
 	}
 	
-// team can only be set one time 
-	if($team = $_POST["team"])
+// program can only be set one time 
+	if($program = $_POST["program"])
 	{
-		if($team != $loggedInUser->team)
+		if($program != $loggedInUser->program)
 		{
-			$loggedInUser->updateTeam($team);
-			$successes[] = lang("ACCOUNT_TEAM_UPDATED", array ($loggedInUser->displayname, getTeamById($team)));
+			$loggedInUser->updateProgram($program);
+			$successes[] = lang("ACCOUNT_PROGRAM_UPDATED", array ($loggedInUser->displayname, getProgramById($program)));
 		}
 	}
 	
-// role can only be set one time 
-	if($role = $_POST["role"])
-	{
-		if($role != $loggedInUser->role)
-		{
-			// Make sure user has already a team
-			if ($loggedInUser->team > 0)
-			{
-				// Check role is available in this team
-				$result = mysqli_query($mysqli, "SELECT id FROM ".$db_table_prefix."users WHERE roleId = '$role' AND teamId = '".$loggedInUser->team."'");
-				//	    printf("Erreur : %s\n", mysqli_error($mysqli));
-				$row_cnt = mysqli_num_rows($result);
-				mysqli_free_result($result);
-				if ($row_cnt>0)
-				{
-					$errors[] = lang("ACCOUNT_ROLE_UNAVAILABLE");
-				} else
-				{
-					$loggedInUser->updateRole($role);
-					$successes[] = lang("ACCOUNT_ROLE_UPDATED", array ($loggedInUser->displayname, getRoleById($role)));
-			
-					if ($role == 6)  // Banker
-					{
-						//We now have to initialise bank account with starting value.
-						initUserBankAccount($loggedInUser->user_id);					
-						$successes[] = lang("ACCOUNT_BANK_INIT", array ($loggedInUser->displayname));
-					}
-				}
-			}
-			else
-			{
-				// Team not set yet, ask user for team before/while selecting role
-				$errors[] = lang("ACCOUNT_SPECIFY_TEAM");
-			}
-		}
-	}
 
 	if(count($errors) == 0 AND count($successes) == 0){
 		$errors[] = lang("NOTHING_TO_UPDATE");
@@ -171,38 +135,8 @@ echo "
 <input type='text' name='email' value='".$loggedInUser->email."' />
 <span>Nickname:</span>
 <input type='text' name='title' value='".$loggedInUser->title."' />
-<span>Role:</span>";
+";
 
-
-/*
-    The Role box
- */
-$roleId = $loggedInUser->role;
-
-if ($roleId == NULL)
-{
-	$roleId0 = 0;
-	$role0 = "--> Please Select";
-
-	echo "
-	<select name='role' />
-	<option style='color:purple;' value='$roleId0' selected>$role0</option>";
-
-	$result = mysqli_query($mysqli,"SELECT id, role FROM role ORDER BY role");
-
-	while (list($roleId, $role) = mysqli_fetch_row($result))
-	{
-		if ($roleId0 != $roleId )
-			echo "<option style='color:grey;' value='$roleId'>$role</option>";
-	}
-	mysqli_free_result($result);
-
-	echo "
-	</select>";
-} 
-else
-{
-	echo "<input type='text' name='roleOk' value='".getRoleById($roleId)."' readonly>";}
 
 /*
    The campus Box
@@ -233,30 +167,36 @@ if ($campusId == NULL)
 } 
 else
 {
-	echo "<input type='text' name='campusOk' value='".getCampusById($campusId)."' readonly>";}
+	echo "<input type='text' name='campusOk' value='".getCampusById($campusId)."' readonly>";
+}
+
 /*
-    The Group Box
-*/echo "<span>Group :</span>";
-$teamId = $loggedInUser->team;
+    The Program Box
+*/
+echo "<span>Program :</span>";
+$programId = $loggedInUser->program;
 
-if ($teamId == NULL)
+if ($programId == NULL)
 {
-	$teamId0 = 0;
-	$teamName0 = "--> Please Select";
-	echo "<select name='team' />
-	<option style='color:red;' value='$teamId0' selected>$teamName0</option>";
+	$programId0 = 0;
+	$programName0 = "--> Please Select";
+	echo "<select name='program' />
+	<option style='color:red;' value='$programId0' selected>$programName0</option>";
 
-	for($teamId=1; $teamId < 251;$teamId++)
-	{
-		if ($teamId0 != $teamId )
-			echo "<option style='color:grey;' value='$teamId'>".getTeamById($teamId)."</option>";
-	}
+        $result = mysqli_query($mysqli,"SELECT id, programName FROM program ORDER BY programName");
+	
+	while(list($id, $name) = mysqli_fetch_row($result))
+        {
+            echo "<option style='color:grey;' value='$id'>$name</option>";
+        }
+        
 	echo "
 	</select>";
 } 
 else
 {
-	echo "<input type='text' name='teamOk' value='".getTeamById($teamId)."' readonly>";}
+	echo "<input type='text' name='programOk' value='".getProgramById($programId)."' readonly>";
+}
 
 echo "<p style='padding-top: 15px'>
 <input type='submit' value='Update' class='submit' />
