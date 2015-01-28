@@ -39,20 +39,11 @@ if(!empty($_GET))
 
     switch($_GET['sort'])
     {
-        case "equipe":
-            $sortOrder =" ORDER BY user_name DESC";
-        break;
         case "titre":
             $sortOrder =" ORDER BY titre DESC";
         break;
-        case "presta":
-            $sortOrder =" ORDER BY prestation_name DESC";
-        break;
         case "desc":
             $sortOrder =" ORDER BY description ASC";
-        break;
-        case "price":
-            $sortOrder =" ORDER BY price ASC";
         break;
         case "time":
             $sortOrder =" ORDER BY timestamp ASC";
@@ -64,32 +55,23 @@ if(!empty($_GET))
 
 /* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  
 
-Page for permission level 1 (user)
+Page for permission level 2 (professor)
 
-= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  = */if ($loggedInUser->checkPermission(array(1)))
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  = */
+if ($loggedInUser->checkPermission(array(2)))
     {        
-        openPage("Le mur de compétences");    
+        openPage("Your thesis propositions");    
         
-        echo "<p>Vous avez évidemment des talents cachés, de part vos expériences associatives, personnelles, professionnelles.
-            Mettez les en valeur et faites gagner à votre équipe des SKEMs.
-            Concrètement, allez poster sur le WOC (Wall of competencies ou mur de compétences) la description de votre compétence,
-            votre email de contact ainsi que le prix demandé pour faire appel à vous.</p>";
+        echo "<p>This is the list of subjects you already proposed to students, you can select one to view the student that is willing to work on this or delete your proposition if you no longer want it.</p>";
             
         switch($_GET['cmd'])
         {
-/*
- *   Liste des offres de compétences déposées par les autres équipes
- */            
-        case "bsell":
-            echo "<p>Voir la liste des compétences déjà déposées par les autres équipes, vous pouvez en voir le détail et y répondre en cliquant sur la loupe <img src='images/loupe.png'>.<br/>Si à la place vous voyez une pastille <img src='images/accept.png'> c'est que vous avez déjà répondu. Cliquez dessus et vous verrez votre réponse.</p>";
-            listeMarketPlace("bsell","Proposer"," AND U.teamId != '".$loggedInUser->team."'$sortOrder");
-        break;
 /*
  *     Effacer une proposition
  * 
  */
         case "delete":
-            echo "<h2>Vous avez demandé à effacer cette offre de compétence</h2>";
+            echo "<h2>You asked to delete this proposition</h2>";
             afficheDetails($_GET['id'], 'W');
             echo "
                 <form name='delete' action='wok.php' method='post'>
@@ -145,34 +127,21 @@ Page for permission level 1 (user)
  */            
 
         default:
-            echo "<h3>Les compétences déjà déposées par votre équipe.</h3>";
-        	if ($userIsBanker)
-        	{
-        		echo "
-            	<p>Vous êtes banquier, vous êtes donc le seul dans votre équipe à pouvoir procéder aux transactions.";
-        	} else
-        	{
-        		echo "
-            	<p>Vous n'êtes pas banquier, il est le seul dans votre équipe à pouvoir procéder aux transactions.";      		
-        	}
-        	echo "Si vous avez reçu des paiements pour cela,
-            une pastille verte <img src='images/accept.png'> est affichée avec leur nombre entre parenthèses.<br/>
-            Vous devez cliquer dessus pour afficher la liste des paiements reçus.</p>";
-            listeMarketPlace("ysell","Proposer"," AND U.teamId = '".$loggedInUser->team."'$sortOrder");
+            listeMarketPlace("ysell","Proposer"," $sortOrder");
 
-            echo "Vendre une compétence";
+            echo "Propose a subject";
             displayInputForm("Proposer");
         break;
         }
 
-    } //fin student
+    } //fin professor
    
 /* = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  
 
-Page for permission level 2 (professor)
+Page for permission level 1 (student)
 
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  = */   
-    if ($loggedInUser->checkPermission(array(2))){
+    if ($loggedInUser->checkPermission(array(1))){
         openPage("Welcome professor");
 
         switch($_GET['cmd'])
@@ -199,10 +168,10 @@ Page for permission level 2 (professor)
         if ($result = mysqli_query($mysqli, "SELECT display_name, sum(debit),count(debit), sum(credit), count(credit) 
             FROM account A, sk_users U WHERE A.account1 = U.id GROUP BY account1")) {
     		echo "<table style='width:100%; border-spacing:0;'>".
-				  "<tr><th>Team</th><th>Débit</th><th>Crédit</th><th width='50%'>Solde</th></tr>";
+				  "<tr><th>Program</th><th>Débit</th><th>Crédit</th><th width='50%'>Solde</th></tr>";
 		/* fetch associative array */
-                while (list($teamName, $debit, $debitTrans, $credit, $creditTrans)  = mysqli_fetch_row($result)) {
-			echo "<tr><td>$teamName</td><td>".number_format($debit)." ($debitTrans) </td><td>".number_format($credit)." ($creditTrans)</td><td>".number_format($credit-$debit)."</td></tr>";
+                while (list($programName, $debit, $debitTrans, $credit, $creditTrans)  = mysqli_fetch_row($result)) {
+			echo "<tr><td>$programName</td><td>".number_format($debit)." ($debitTrans) </td><td>".number_format($credit)." ($creditTrans)</td><td>".number_format($credit-$debit)."</td></tr>";
 	         }
                  echo "</table>
 		<br/>

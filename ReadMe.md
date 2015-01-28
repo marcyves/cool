@@ -11,6 +11,9 @@ Thesis Selection system
     
 Admin functions
    - Manage the list of programs
+   - Manage the list of disciplines
+   - Manage the list of departments
+   - Link professor users to departments and programs
 
 - Review what to keep from the following todo:
 
@@ -29,6 +32,8 @@ Admin functions
 - aide en ligne
 - messagerie interne
 
+##BUGS
+- Clean up strings in order to allow ' (apostrophe) in thesis proposition description.
 
 ##Done
 
@@ -43,6 +48,13 @@ Admin functions
     - ALTER table users to rename teamId column into programId
 
 - remove references to 'role'
-    - drop table role
-    - alter table users to remove roleId column
+    - DROP table role
+    - DROP table account
+    - ALTER users table to remove roleId column
     - funcs.php
+
+- Thesis Proposition
+    - Delete wok.php and transfer code for proposition management into account.php
+    - Delete market.php
+    - ALTER market table to remove prestation, market_id and price
+    - DROP prestation table

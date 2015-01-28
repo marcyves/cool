@@ -57,22 +57,13 @@ if(isUserLoggedIn()) {
 	"<nav>
             <div id='menu_container'>
                 <ul id='nav'>
-                    <li><a href='account.php'>Account Home</a></li>";
+                    <li><a href='account.php'>Home</a></li>";
 	if (isUserReady($loggedInUser->user_id))
-	{
-            echo "          <li><a href='market.php'>Marketplace</a>";
-            if ($loggedInUser->checkPermission(array(2))){ //Links for permission level 1 (student)
-            echo "           <ul>
-                    <li><a href='market.php'>Vos questions (seeker)</a></li>
-                    <li><a href='market.php?cmd=bbuy'>Répondre aux questions (solver)</a></li>
-                </ul>";
-            }
-            echo "           </li>";
-            
+	{          
             if ($loggedInUser->checkPermission(array(2))){ //Links for permission level 2 (professor)
-                echo "<li><a href='wok.php'>Thesis Proposition</a></li>";}
                 echo "<li><a href='userlist.php'>Groupes</a></li>";
-	}	
+            }
+        }        
    	echo "           <li><a href='user_settings.php'>User Settings</a></li>
                     <li><a href='logout.php'>Logout</a></li>
                     </ul>
@@ -256,16 +247,13 @@ function cleanThisString($t)
 function listeMarketPlace($cmd,$type,$sqlTmp)
 {
     global $mysqli, $loggedInUser;
-
-
     
     $flagSelf = ((substr($cmd,0, 1) == 'y')? true : false);    	// On détermine si on affiche les données de l'équipe ($flagself true) ou des autres équipes ($flagself false)
-	$userIsBanker = (($loggedInUser->role == 6)? true : false);	
 
     // On affiche les données de la table Market pour $type
-    $sql = "SELECT M.id, display_name, email, titre, description, price, timestamp, prestation_name 
-            FROM market M, sk_users U, prestation P 
-            WHERE P.id = prestation_id AND U.id = M.user_id AND type = '$type'$sqlTmp";
+    $sql = "SELECT M.id, display_name, email, titre, description, timestamp
+            FROM market M, sk_users U 
+            WHERE U.id = M.user_id AND type = '$type'$sqlTmp";
                
 //debug    echo "<br/>$sql";
     if ($result = mysqli_query($mysqli, $sql))
@@ -275,9 +263,9 @@ function listeMarketPlace($cmd,$type,$sqlTmp)
         if ($nbLignes > 0)
         {
             echo "<table>".
-             "<tr><th>".sortLink("equipe&cmd=$cmd","Qui")."</th><th>".sortLink("titre&cmd=$cmd","Quoi")."</th><th>".sortLink("desc&cmd=$cmd","Description")."</th><th>".sortLink("presta&cmd=$cmd","Prestation")."</th><th>".sortLink("price&cmd=$cmd","Prix")."</th><th>".sortLink("time&cmd=$cmd","Date dépot")."</th><th></th></tr>";
+             "<tr><th>".sortLink("titre&cmd=$cmd","Title")."</th><th>".sortLink("desc&cmd=$cmd","Description")."</th>><th>".sortLink("time&cmd=$cmd","Date dépot")."</th><th></th></tr>";
 
-            while (list($idMarket, $idUser, $email, $titre, $description, $price, $timestamp, $prestation)  = mysqli_fetch_row($result))
+            while (list($idMarket, $idUser, $email, $titre, $description, $timestamp, $prestation)  = mysqli_fetch_row($result))
             {
                 $nbLignesDetail = countMarketReply($idMarket);
                 $iconDetail = iconMarketReply($idMarket, "");
@@ -294,12 +282,9 @@ function listeMarketPlace($cmd,$type,$sqlTmp)
                     }
                 } else {
                     // On fait la liste des $type postés par les autres équipes
-                    if ($userIsBanker)
 	                    $tmp = "<a href='".$_SERVER['PHP_SELF']."?cmd=detail&id=$idMarket'>".iconMarketReply($idMarket, $loggedInUser->user_id)."</a>";
-	                else
-	                    $tmp = "<img src='images/lock.png'>";
                 }
-                echo "<tr><td><a href='mailto:$email'>$idUser</a></td><td>$titre</td><td>$description</td><td>$prestation</td><td>$price</td><td>$timestamp</td><td>$tmp</td></tr>";
+                echo "<tr><td>$titre</td><td>$description</td><td>$timestamp</td><td>$tmp</td></tr>";
             }
             echo "</table>";
 
@@ -464,22 +449,18 @@ function browseMyProgram($id)
 	
 }
 
-function afficheDetails($id, $type)
+function afficheDetails($id)
 {
     global $mysqli, $loggedInUser;
 
-    $result = mysqli_query($mysqli, "SELECT M.id, display_name, email, titre, description, timestamp, prestation_name, price 
-                                       FROM market M, sk_users U, prestation P WHERE M.id = '$id' AND U.id = M.user_id");
+    $result = mysqli_query($mysqli, "SELECT titre, description, timestamp FROM market WHERE id = '$id'");
 
     echo "<table>";
     
-    list($idMarket, $idUser, $email, $titre, $description, $timestamp, $prestation, $price) = mysqli_fetch_row($result);
-    if ($type == 'M') {
-        echo "<tr><td colspan='2'>Demande de <b>$prestation</b> déposée par l'équipe $idUser (<a href='mailto:$email'>$email</a>) pour un montant de ".number_format($price)." SKEMs.</td></tr>";
-    } else if ($type == 'W') {
-        echo "<tr><td colspan='2'>Proposition de <b>$prestation</b> déposée par l'équipe $idUser (<a href='mailto:$email'>$email</a>) pour un montant de ".number_format($price)." SKEMs.</td></tr>";
-    }
+    list($titre, $description, $timestamp) = mysqli_fetch_row($result);
         
+    echo "<tr><td colspan='2'>Read carefully the details below.</td></tr>";
+
     echo "<tr><td>Titre :</td><td>$titre</td></tr>
     <tr><td>Description :</td><td>$description</td></tr>
     <tr><td>Date de dépot :</td><td>$timestamp</td></tr>
@@ -609,17 +590,14 @@ function insertMarketTransaction()
         $type         = $_POST["cmd"];
 	$titre        = cleanThisString(trim($_POST["titre"]));
 	$description  = cleanThisString(trim($_POST["description"]));
-	$prestationId = trim($_POST["prestation"]);
-	$marketId     = trim($_POST["id"]);
-	$price        = trim($_POST["price"]);
         
         $timeStamp    = date("Y-m-d H:i:s");
         
         if ($type == 'delete'){
             $sql = "DELETE FROM market WHERE id = '$marketId'";
         } else {
-            $sql = "INSERT INTO `market` (`id`, `user_id`,`type`, `titre`, `description`, prestation_id, market_id, timestamp, price) 
-            VALUES (NULL, '$idUser', '$type', '$titre', '$description', '$prestationId', '$marketId', '$timeStamp', '$price');";
+            $sql = "INSERT INTO `market` (`id`, `user_id`,`type`, `titre`, `description`, timestamp) 
+            VALUES (NULL, '$idUser', '$type', '$titre', '$description', '$timeStamp');";
         }
 //debug      echo "<p>$sql";
 //      die ();
@@ -644,11 +622,10 @@ function displayInputForm($type){
     echo "<form action='".$_SERVER['PHP_SELF']."' method='post'>
           <div class='form_settings'>";
     echo '<p><span>Titre : </span><input type="text" name="titre" value="" /></p>
-          <p><span>Description : </span><textarea rows="8" cols="50" name="description"></textarea></p>'.selectPresta().
-         "</p><p><span>Prix proposé : </span><input type='text' name='price' value='' /></p>
-          <p style='padding-top: 15px'>
-          <input type='submit' name='cmd' value='$type' class='submit' />
-          </div></form></div>";
+          <p><span>Description : </span><textarea rows="8" cols="50" name="description"></textarea></p>
+          <p style="padding-top: 15px">
+          <input type="submit" name="cmd" value="'.$type.'" class="submit" />
+          </div></form></div>';
 }
 
 function addProfessor($name,$display, $mail){
