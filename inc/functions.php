@@ -181,55 +181,6 @@ function title($icon, $title)
 
 }
 
-function accountBrowse($userId)
-{
-    global $mysqli;
-
-
-    /* Requête "Select" retourne un jeu de résultats */
-    if ($result = mysqli_query($mysqli, "SELECT * FROM account WHERE account1 = '$userId'")) {
-	$nbLignes = mysqli_num_rows($result);
-
-        if ($nbLignes > 0){
-		$amount = 0;
-		echo "<p><table style='width:100%; border-spacing:0;'>".
-				  "<tr><th>Date</th><th>Débit</th><th>Crédit</th><th width='50%'>Comment</th></tr>";
-		/* fetch associative array */
-                while (list($id, $account, $accountFrom, $debit, $credit, $comment, $date)  = mysqli_fetch_row($result)) {
-			echo "<tr><td>$date</td><td>".number_format($debit)."</td><td>".number_format($credit)."</td><td>$comment</td></tr>";
-			$amount += $credit-$debit;
-                }
-
-                echo "<tr><th></th><th><b>Solde Final : </b></th><th><b>".number_format($amount, 2, ',', ' ')."</b></th><th></th></tr>";
-
-                // Notation anglaise (par défaut)
-                // Notation française
-                //$nombre_format_francais = number_format($number, 2, ',', ' ');
-		echo "</table>";
-          }
-
-            /* Libération du jeu de résultats */
-            mysqli_free_result($result);
-        }
-}
-
-function selectPresta()
-{
-    global $mysqli;
-
-    $tmp = "";
-
-    $result = mysqli_query($mysqli, "SELECT id, prestation_name FROM prestation");
-    $tmp .=  "
-        <p><span>Prestation :</span><select name='prestation'>";
-    while (list($id, $prestation)  = mysqli_fetch_row($result)) {
-        $tmp .= "\n<option value='$id'>$prestation</option>";
-    }
-    $tmp .= "</select></p>";
-
-    return $tmp;
-}
-
 function sortLink($cmd, $label)
 {
  return "<a href='".$_SERVER['PHP_SELF']."?sort=$cmd'>$label</a>";
@@ -246,10 +197,9 @@ function cleanThisString($t)
 
 function listeMarketPlace($cmd,$type,$sqlTmp)
 {
+    // cmd is professor or student
     global $mysqli, $loggedInUser;
     
-    $flagSelf = ((substr($cmd,0, 1) == 'y')? true : false);    	// On détermine si on affiche les données de l'équipe ($flagself true) ou des autres équipes ($flagself false)
-
     // On affiche les données de la table Market pour $type
     $sql = "SELECT M.id, display_name, email, titre, description, timestamp
             FROM market M, sk_users U 
@@ -269,21 +219,24 @@ function listeMarketPlace($cmd,$type,$sqlTmp)
             {
                 $nbLignesDetail = countMarketReply($idMarket);
                 $iconDetail = iconMarketReply($idMarket, "");
-                if ($flagSelf)
+                
+                switch($cmd)
                 {
-                    // On fait la liste des $type postés par l'équipe connectée
+                    case "professor":
                     // On vérifie d'abord si elle a reçu des réponses
                     if ($nbLignesDetail > 0)
                     {
                         $tmp = "<a href='".$_SERVER['PHP_SELF']."?cmd=Rdetail&id=$idMarket'>($nbLignesDetail) $iconDetail </a>";
                     } else {
-                        // pas de réponse, on peut l'efffacer
-                        $tmp = "<a href='".$_SERVER['PHP_SELF']."?cmd=delete&id=$idMarket'><img src='images/delete.png'></a>";
+                        // pas de réponse, on peut l'effacer
+                        $tmp = "<a href='".$_SERVER['PHP_SELF']."?cmd=delete&id=$idMarket'><img src='images/delete.png' width='24' height='24'></a>"
+                              ."<a href='".$_SERVER['PHP_SELF']."?cmd=update&id=$idMarket'><img src='images/process.png' width='24' height='24'></a>";
                     }
-                } else {
-                    // On fait la liste des $type postés par les autres équipes
-	                    $tmp = "<a href='".$_SERVER['PHP_SELF']."?cmd=detail&id=$idMarket'>".iconMarketReply($idMarket, $loggedInUser->user_id)."</a>";
-                }
+                    break;
+                    case "student":
+ 	                    $tmp = "<a href='mailto:$email'>$idUser</td><td><a href='".$_SERVER['PHP_SELF']."?cmd=detail&id=$idMarket'>".iconMarketReply($idMarket, $loggedInUser->user_id)."</a>";
+                    break;
+               }
                 echo "<tr><td>$titre</td><td>$description</td><td>$timestamp</td><td>$tmp</td></tr>";
             }
             echo "</table>";
@@ -317,12 +270,12 @@ function iconMarketReply($marketId, $userId){
         $nbLignesDetail = mysqli_num_rows($detail);
 
         if ($nbLignesDetail > 0){
-            return "<img src='images/add.png'>";
+            return "<img src='images/cross.png'>";
         } else {            
             return "<img src='images/accept.png'>";
         }
     } else {
-        return "<img src='images/loupe.png'>";
+        return "<img src='images/add.png'>";
     }
 }
 
@@ -396,7 +349,7 @@ function isUserReady($id)
     global $mysqli;
 
 	
-    $result = mysqli_query($mysqli,"SELECT programId FROM sk_users WHERE id='$id'");
+    $result = mysqli_query($mysqli,"SELECT idProgram FROM user_program WHERE idUser='$id'");
     list($name) = mysqli_fetch_row($result);
 
     if ($name > 0)
@@ -635,16 +588,6 @@ function addProfessor($name,$display, $mail){
     $result = mysqli_query($mysqli,"SELECT id FROM `sk_users` WHERE user_name = '$name';");
     list($idNew)  = mysqli_fetch_row($result);
     $result = mysqli_query($mysqli, "INSERT INTO `sk_user_permission_matches` (`id`, `user_id`, `permission_id`) VALUES (NULL, '$idNew', '2');");    
-}
-
-function initUserBankAccount($id){
-    global $mysqli;
-    
-    if (!mysqli_query($mysqli, "INSERT INTO `account` (`id`, `account1`, `account2`, `debit`, `credit`, `description`, `timestamp`, `prestation_Id`) VALUES (NULL, '$id', NULL, NULL, '10000', 'Initial Value', NOW(), NULL);"))
-    {
-	    printf("Erreur : %s\n", mysqli_error($mysqli));
-    }
-    
 }
 
 ?>

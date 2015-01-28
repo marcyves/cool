@@ -4,10 +4,7 @@ Thesis Selection system
 
 ##To Do
 
-- Adapt Cool to Tss
-    - Account
-    - Change labels
-    
+- Allow a professor to participate into different programs (user_settings.php)    
     
 Admin functions
    - Manage the list of programs
@@ -36,6 +33,9 @@ Admin functions
 - Clean up strings in order to allow ' (apostrophe) in thesis proposition description.
 
 ##Done
+- Adapt Cool to Tss
+    - DROP account table
+    - Change labels
 
 - Change references to 'team' into 'program'
     - user_settings.php
@@ -49,7 +49,6 @@ Admin functions
 
 - remove references to 'role'
     - DROP table role
-    - DROP table account
     - ALTER users table to remove roleId column
     - funcs.php
 

@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `tss` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `tss`;
 -- MySQL dump 10.13  Distrib 5.6.19, for osx10.7 (i386)
 --
 -- Host: 127.0.0.1    Database: tss
@@ -17,19 +15,6 @@ USE `tss`;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `campus`
---
-
-DROP TABLE IF EXISTS `campus`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `campus` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `campusName` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `campus`
@@ -42,20 +27,6 @@ INSERT INTO `campus` VALUES (1,'Lille'),(2,'Paris'),(3,'Sophia Antipolis'),(4,'S
 UNLOCK TABLES;
 
 --
--- Table structure for table `discipline`
---
-
-DROP TABLE IF EXISTS `discipline`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `discipline` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `discipline` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `discipline`
 --
 
@@ -64,24 +35,6 @@ LOCK TABLES `discipline` WRITE;
 INSERT INTO `discipline` VALUES (1,'Finance'),(2,'Marketing'),(3,'HR'),(4,'IS');
 /*!40000 ALTER TABLE `discipline` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `market`
---
-
-DROP TABLE IF EXISTS `market`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `market` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
-  `type` char(20) DEFAULT NULL,
-  `titre` varchar(80) DEFAULT NULL,
-  `description` varchar(512) DEFAULT NULL,
-  `timestamp` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1719 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `market`
@@ -94,20 +47,6 @@ INSERT INTO `market` VALUES (1702,231,'Proposer','Micro SHURE SM-58','C&#039;est
 UNLOCK TABLES;
 
 --
--- Table structure for table `program`
---
-
-DROP TABLE IF EXISTS `program`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `program` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `programName` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `program`
 --
 
@@ -116,21 +55,6 @@ LOCK TABLES `program` WRITE;
 INSERT INTO `program` VALUES (1,'BC & ISM'),(2,'IB'),(3,'LFM'),(5,'GD');
 /*!40000 ALTER TABLE `program` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `sk_configuration`
---
-
-DROP TABLE IF EXISTS `sk_configuration`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sk_configuration` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) NOT NULL,
-  `value` varchar(150) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `sk_configuration`
@@ -143,21 +67,6 @@ INSERT INTO `sk_configuration` VALUES (1,'website_name','Thesis Selection System
 UNLOCK TABLES;
 
 --
--- Table structure for table `sk_pages`
---
-
-DROP TABLE IF EXISTS `sk_pages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sk_pages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `page` varchar(150) NOT NULL,
-  `private` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `sk_pages`
 --
 
@@ -166,21 +75,6 @@ LOCK TABLES `sk_pages` WRITE;
 INSERT INTO `sk_pages` VALUES (1,'account.php',1),(2,'activate-account.php',0),(3,'admin_configuration.php',3),(4,'admin_page.php',3),(5,'admin_pages.php',3),(6,'admin_permission.php',3),(7,'admin_permissions.php',3),(8,'admin_user.php',3),(9,'admin_users.php',3),(10,'forgot-password.php',0),(11,'index.php',0),(14,'logout.php',1),(15,'register.php',0),(16,'resend-activation.php',0),(17,'user_settings.php',1),(18,'admin_init.php',0),(19,'market.php',0),(20,'pay.php',0),(21,'wok.php',0);
 /*!40000 ALTER TABLE `sk_pages` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `sk_permission_page_matches`
---
-
-DROP TABLE IF EXISTS `sk_permission_page_matches`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sk_permission_page_matches` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `permission_id` int(11) NOT NULL,
-  `page_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `sk_permission_page_matches`
@@ -193,20 +87,6 @@ INSERT INTO `sk_permission_page_matches` VALUES (1,1,1),(2,1,14),(3,1,17),(4,2,1
 UNLOCK TABLES;
 
 --
--- Table structure for table `sk_permissions`
---
-
-DROP TABLE IF EXISTS `sk_permissions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sk_permissions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `sk_permissions`
 --
 
@@ -215,21 +95,6 @@ LOCK TABLES `sk_permissions` WRITE;
 INSERT INTO `sk_permissions` VALUES (1,'Student'),(2,'Professor'),(3,'Administrator');
 /*!40000 ALTER TABLE `sk_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `sk_user_permission_matches`
---
-
-DROP TABLE IF EXISTS `sk_user_permission_matches`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sk_user_permission_matches` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1980 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `sk_user_permission_matches`
@@ -242,34 +107,6 @@ INSERT INTO `sk_user_permission_matches` VALUES (1845,222,1),(1846,223,2),(1847,
 UNLOCK TABLES;
 
 --
--- Table structure for table `sk_users`
---
-
-DROP TABLE IF EXISTS `sk_users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sk_users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_name` varchar(50) NOT NULL,
-  `display_name` varchar(50) NOT NULL,
-  `password` varchar(225) NOT NULL,
-  `email` varchar(150) NOT NULL,
-  `activation_token` varchar(225) NOT NULL,
-  `last_activation_request` int(11) NOT NULL,
-  `lost_password_request` tinyint(1) NOT NULL,
-  `active` tinyint(1) NOT NULL,
-  `title` varchar(150) NOT NULL,
-  `disciplineId` int(11) unsigned NOT NULL,
-  `campusId` int(11) unsigned NOT NULL,
-  `sign_up_stamp` int(11) NOT NULL,
-  `last_sign_in_stamp` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `campusId` (`campusId`),
-  CONSTRAINT `sk_users_ibfk_1` FOREIGN KEY (`campusId`) REFERENCES `campus` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=355 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `sk_users`
 --
 
@@ -280,23 +117,6 @@ INSERT INTO `sk_users` VALUES (224,'prof','MÃ©lanie CIUSSI','9051a509f95691159
 UNLOCK TABLES;
 
 --
--- Table structure for table `user_program`
---
-
-DROP TABLE IF EXISTS `user_program`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user_program` (
-  `idUser` int(11) NOT NULL,
-  `idProgram` int(11) NOT NULL,
-  PRIMARY KEY (`idUser`,`idProgram`),
-  KEY `idProgram` (`idProgram`),
-  CONSTRAINT `user_program_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `sk_users` (`id`),
-  CONSTRAINT `user_program_ibfk_2` FOREIGN KEY (`idProgram`) REFERENCES `program` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `user_program`
 --
 
@@ -305,14 +125,3 @@ LOCK TABLES `user_program` WRITE;
 INSERT INTO `user_program` VALUES (228,2),(224,3);
 /*!40000 ALTER TABLE `user_program` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2015-01-28 22:56:43

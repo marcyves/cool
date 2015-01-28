@@ -160,7 +160,7 @@ if ($loggedInUser->checkPermission(array(2)))
         case "detail":
             echo "<p>Here are the details of your proposition. You may want to update the programs or discipline it applies.</p>";            
             afficheDetails($_GET['id'], 'W');
-            echo "You can <a href='account.php?cmd=delete&id=".$_GET['id']."'><img src='images/delete.png' width='24' height='24'>delete</a> or <a href='account.php?cmd=delete&id=".$_GET['id']."'><img src='images/process.png' width='24' height='24'>update</a> this entry.";
+            echo "";
         break;
 /*
  * La page de garde par défaut du Marketplace
@@ -172,8 +172,8 @@ if ($loggedInUser->checkPermission(array(2)))
            echo "<p>This is the list of subjects you already proposed to students, you can select one to view the student that is willing to work on this or delete your proposition if you no longer want it.</p>";
            echo "<br/>"
             . "<ul>"
-            . "<li>If you see a <img src='./images/loupe.png' width='24' height='24'> the proposition is available, click on the icon to modify or delete <img src='./images/delete.png' width='24' height='24'> it.</li>"
-            . "<li>If you see a <img src='./images/cross.png' width='24' height='24'> the proposition is already hold by a student</li>"
+            . "<li>If the proposition is available, click on the icon to <img src='images/delete.png' width='24' height='24'> delete or <img src='images/process.png' width='24' height='24'> update this entry."
+            . "<li>If you see a <img src='./images/cross.png' width='24' height='24'> the proposition is already hold by a student and you cannot modify it.</li>"
             . "</ul>"
             . "</p>";
  

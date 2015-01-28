@@ -365,8 +365,8 @@ function fetchUserDetails($username=NULL,$token=NULL, $id=NULL)
 		lost_password_request,
 		active,
 		title,
+                disciplineId,
 		campusId,
-		programId,		
 		sign_up_stamp,
 		last_sign_in_stamp
 		FROM ".$db_table_prefix."users
