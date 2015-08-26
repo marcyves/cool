@@ -46,14 +46,14 @@
 // your ldap server
 
 
-$ldap_host = '10.10.10.10';
+$ldap_host = '10.6.16.10';
 // your ldap server's port number
 $ldap_port = '3268';
 //domain
-$ldap_basedn = 'DC=EDU';
+$ldap_basedn = 'DC=sk,DC=skema,DC=EDU';
 
 //search term for students
-$ldap_search_dn = '';
+$ldap_search_dn = 'samaccountname';
 
 //additional server params for use of replica in case of problems
 $ldap_host2 = '';
@@ -63,8 +63,8 @@ $ldap_port2 = '';
 $ldap_version = '3';
 
 //non-anonymous LDAP mode
-$ldap_rdn = '';
-$ldap_pass = '';
+$ldap_rdn = 'lectureADSophia@sk.skema.edu';
+$ldap_pass = 'LeM2pass!';
 
 //courses inscriptions
 $ldap_session_field = '';

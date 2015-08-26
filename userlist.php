@@ -36,6 +36,11 @@ if(!empty($_POST))
 		$errors[] = lang("SQL_ERROR");
 }
 
+for($i=1;$i <= 153; $i++)
+{
+	$teamPresent[$i] = $i.", ";
+}
+
 $userData = fetchAllUsersByTeam(); //Fetch information for all users
 
 //echo resultBlock($errors,$successes);
@@ -53,6 +58,7 @@ foreach ($userData as $v1) {
     if ($v1['team'] != $previousTeam)
     {
     	$previousTeam = $v1['team'];
+    	$teamPresent[$previousTeam] ='';
     	echo "
 	<tr>
 	<td colspan='5'>Team : ".$v1['team']."</td></tr>";
@@ -83,7 +89,12 @@ foreach ($userData as $v1) {
 echo "</table>
     </form>";
 
-
+echo "<p>Equipes absentes : ";
+for($i=1;$i <= 153; $i++)
+{
+	echo $teamPresent[$i];
+}
+echo ".";
 closePage();
 
 ?>

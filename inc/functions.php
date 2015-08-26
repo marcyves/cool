@@ -52,7 +52,7 @@ function openPage($title)
 
 if(isUserLoggedIn()) {
 //Links for logged in user
-
+	
     echo
 	"<nav>
             <div id='menu_container'>
@@ -78,7 +78,12 @@ if(isUserLoggedIn()) {
    		}
    		echo "           </li>";
   		if ($loggedInUser->checkPermission(array(2))){ //Links for permission level 2 (professor)
-      		echo "               <li><a href='accountError.php'>Anomalies</a></li>";
+      		echo "               <li><a href='accountMirror.php'>Anomalies</a></li>";
+      		
+      		echo "<ul>
+                        <li><a href='accountNull.php'>Nulles</a></li>
+                        <li><a href='accountMirror.php'>Mirroirs</a></li>
+                    </ul>";
       		echo "               <li><a href='pay.php'>Paiement</a></li>";
   	   		echo "               <li><a href='userlist.php'>Groupes</a></li>";
   		}
@@ -90,7 +95,6 @@ if(isUserLoggedIn()) {
         </nav>
         </header>
         ";
-
         
 if ($loggedInUser->checkPermission(array(1)))
 	$userLevel = "Student";
@@ -99,13 +103,12 @@ if ($loggedInUser->checkPermission(array(2)))
 if ($loggedInUser->checkPermission(array(3)))
 	$userLevel = "Admin";
 	
-
         echo '<div id="site_content">';
-        $text = "<h3>".$loggedInUser->displayname."</h3><i>$userLevel</i>".
+        $text = "<h3>".$loggedInUser->displayname."</h3>$userLevel".
          "<h5>".$loggedInUser->title." (".getRoleById($loggedInUser->role).")</h5>
              <h4>Liens utiles</h4>
              <ul>
-             <li><a target='_blank' href='http://www.google.com'>Google</a></li>
+             <li><a target='_blank' href='http://movilab.org/index.php?title=SKEMA_BS_:_Cours_de_Performance_Durable_-_M1_-_Ann%C3%A9e_2014-2015'>Movilab</a></li>
              </ul>";
 
         echo displaySideMenu($text);
@@ -119,8 +122,9 @@ if ($loggedInUser->checkPermission(array(3)))
 	<li><a href='admin_users.php'>Admin Users</a></li>
 	<li><a href='admin_permissions.php'>Admin Permissions</a></li>
 	<li><a href='admin_pages.php'>Admin Pages</a></li>
-	<li><a href='admin_init.php'>Initialisation des comptes users</a></li>
 	</ul>";
+
+//		<li><a href='admin_init.php'>Initialisation des comptes users</a></li>
 
         echo displaySideMenu($text);
 
@@ -166,7 +170,7 @@ if ($loggedInUser->checkPermission(array(3)))
          "<h3>".$loggedInUser->title."</h3>
              <h2>Liens utiles</h2>
              <ul>
-             <li><a href='http://movilab.org/index.php?title=SKEMA_BS_:_Cours_de_Performance_Durable_-_M1_-_Ann%C3%A9e_2013-2014'>Movilab</a></li>
+             <li><a href='http://movilab.org/index.php?title=SKEMA_BS_:_Cours_de_Performance_Durable_-_M1_-_Ann%C3%A9e_2014-2015'>Movilab</a></li>
              </ul>".
          "<h2>Important</h2>
           <ul>
@@ -186,15 +190,13 @@ echo "</div>
 
 function closePage()
 {
-    echo "</div>
-        </div>
+echo "</div>
+</div>
 <footer>
 <p>(c) <a href='http://about.me/marc.augier'>Marc Augier</a> 2013 | <a href='https://github.com/marcyves/cool'>Cool on GitHub</a> | <a href='http://www.css3templates.co.uk'>design from css3templates.co.uk</a></p>
 </footer>
-
 </body>
 </html>";
-
 }
 
 function displaySideMenu($t)
@@ -210,7 +212,6 @@ function title($icon, $title)
             <h1 style="margin: 15px 0 0 0;">'.$title.'</h1>';
 
 }
-
 function accountBrowse($userId)
 {
     global $mysqli;
@@ -399,8 +400,7 @@ function getTeamById($id)
 	if (list($name) = mysqli_fetch_row($result))
 		return $name." ($id)";
 	else
-		return "$id";
-}
+		return "$id";}
 
 
 function getRoleById($id)
@@ -412,8 +412,7 @@ function getRoleById($id)
 	if (list($name) = mysqli_fetch_row($result))
 		return $name;
 	else
-		return "No role defined";
-}
+		return "No role defined";}
 
 function getCampusById($id)
 {
@@ -424,8 +423,7 @@ function getCampusById($id)
 	if (list($name) = mysqli_fetch_row($result))
 		return $name;
 	else
-		return false;
-}
+		return false;}
 
 function isUserReady($id)
 {
@@ -450,8 +448,7 @@ function isUserReady($id)
 			} else
 			{
 				return false;
-			}
-		} else
+			}		} else
 		{
 			return false;
 		}
