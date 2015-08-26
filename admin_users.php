@@ -76,6 +76,9 @@ foreach ($userData as $v1) {
 	</tr>";
 }
 
+echo "</table>
+		<br/>
+* * * * End Of Report * * * *";
 
 closePage();
 
