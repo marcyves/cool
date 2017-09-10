@@ -1,8 +1,8 @@
-#COOL
+# COOL
 `Collaborative Open Online Learning`
 
 
-##To Do
+## To Do
 
 - TRANSLATE THIS TODO
 - ACCOUNT: Display short lists
@@ -31,7 +31,7 @@
 - messagerie interne
 
 
-##Done
+## Done
 - Nouvelle fonction professeur pour identification des transactions en erreur (0 ou négative).
 - Liste détaillée des transactions par utilisateur.
 - procédure de création des comptes étudiants au lancement d'un cours (LDAP ?)
